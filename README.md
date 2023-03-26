@@ -27,7 +27,7 @@
 - Leave group
 - Group details
 
-<img src="https://github.com/jahidul96/fb_firebase_chatapp/blob/main/assets/cover.png"  />
+<img src="https://github.com/jahidul96/flutter_firebase_chatapp/blob/main/assets/cover.png"  />
 
 #What more wanted to do!!
 
