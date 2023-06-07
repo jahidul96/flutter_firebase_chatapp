@@ -9,16 +9,15 @@ class ChatModel {
   String lastMsg;
   String from;
   String profilePic;
-  Timestamp createdAt;
+  DateTime createdAt;
   String imgUrl;
   bool seen;
-
   ChatModel({
     required this.username,
     required this.lastMsg,
     required this.from,
-    required this.createdAt,
     required this.profilePic,
+    required this.createdAt,
     required this.imgUrl,
     required this.seen,
   });
@@ -29,7 +28,7 @@ class ChatModel {
       'lastMsg': lastMsg,
       'from': from,
       'profilePic': profilePic,
-      'createdAt': createdAt,
+      'createdAt': createdAt.millisecondsSinceEpoch,
       'imgUrl': imgUrl,
       'seen': seen,
     };
@@ -41,9 +40,14 @@ class ChatModel {
       lastMsg: map['lastMsg'] ?? '',
       from: map['from'] ?? '',
       profilePic: map['profilePic'] ?? '',
-      createdAt: map['createdAt'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
       imgUrl: map['imgUrl'] ?? '',
       seen: map['seen'] ?? false,
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory ChatModel.fromJson(String source) =>
+      ChatModel.fromMap(json.decode(source));
 }

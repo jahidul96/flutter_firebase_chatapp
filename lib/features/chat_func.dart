@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, avoid_print
 
 import 'dart:io';
 
@@ -12,59 +12,85 @@ import '../models/chat_model.dart';
 import '../models/message_model.dart';
 import 'package:path/path.dart' as p;
 
-// groupChat Function
-void groupChat({
-  required String text,
-  required String senderId,
-  required String senderProfilePic,
-  required String senderUsername,
-  required File? image,
-  required BuildContext context,
+groupChat({
+  required MessageModel msgData,
   required String groupId,
+  required String senderId,
+  required String text,
 }) async {
-  // msg data
-  var msgdata = MessageModel(
-    text: text,
-    senderId: senderId,
-    createdAt: Timestamp.now(),
-    imgUrl: "",
-    senderProfilePic: senderProfilePic,
-    senderUsername: senderUsername,
-  );
-
-  if (image != null) {
-    String fileName = p.basename(image.path);
-
-    var imagePath = 'groupImages/${DateTime.now()}$fileName';
-
-    var url = await uploadFile(
-        fileName: fileName,
-        image: image,
-        imagePath: imagePath,
-        context: context);
-
-    msgdata.imgUrl = url;
-
-    await db
+  try {
+    await FirebaseFirestore.instance
         .collection("groups")
         .doc(groupId)
         .collection("messages")
-        .add(msgdata.toMap());
-  } else {
-    await db
-        .collection("groups")
-        .doc(groupId)
-        .collection("messages")
-        .add(msgdata.toMap());
+        .add(
+          msgData.toMap(),
+        );
+
+    await db.collection("groups").doc(groupId).update({
+      "lastMsg": text,
+      "seen": false,
+      "justCreated": false,
+      "senderId": senderId,
+    });
+  } catch (e) {
+    print(e);
   }
-
-  await db.collection("groups").doc(groupId).update({
-    "lastMsg": text,
-    "seen": false,
-    "justCreated": false,
-    "senderId": senderId,
-  });
 }
+
+// groupChat Function
+// void groupChat({
+//   required String text,
+//   required String senderId,
+//   required String senderProfilePic,
+//   required String senderUsername,
+//   required File? image,
+//   required BuildContext context,
+//   required String groupId,
+// }) async {
+//   // msg data
+//   var msgdata = MessageModel(
+//     text: text,
+//     senderId: senderId,
+//     createdAt: Timestamp.now(),
+//     imgUrl: "",
+//     senderProfilePic: senderProfilePic,
+//     senderUsername: senderUsername,
+//   );
+
+//   if (image != null) {
+//     String fileName = p.basename(image.path);
+
+//     var imagePath = 'groupImages/${DateTime.now()}$fileName';
+
+//     var url = await uploadFile(
+//         fileName: fileName,
+//         image: image,
+//         imagePath: imagePath,
+//         context: context);
+
+//     msgdata.imgUrl = url;
+
+//     await db
+//         .collection("groups")
+//         .doc(groupId)
+//         .collection("messages")
+//         .add(msgdata.toMap());
+//   } else {
+//     await db
+//         .collection("groups")
+//         .doc(groupId)
+//         .collection("messages")
+//         .add(msgdata.toMap());
+//   }
+
+//   await db.collection("groups").doc(groupId).update({
+//     "lastMsg": text,
+//     "seen": false,
+//     "justCreated": false,
+//     "senderId": senderId,
+//   });
+// }
 
 // one to one chat functions
 void onToOneChat({
@@ -82,7 +108,7 @@ void onToOneChat({
   var msgdata = MessageModel(
       text: text,
       senderId: senderId,
-      createdAt: Timestamp.now(),
+      createdAt: DateTime.now(),
       imgUrl: "",
       senderProfilePic: senderProfilePic,
       senderUsername: senderUsername);
@@ -92,7 +118,7 @@ void onToOneChat({
     username: senderUsername,
     lastMsg: text,
     from: senderId,
-    createdAt: Timestamp.now(),
+    createdAt: DateTime.now(),
     profilePic: senderProfilePic,
     imgUrl: "",
     seen: true,
@@ -103,7 +129,7 @@ void onToOneChat({
     username: friendUsername,
     lastMsg: text,
     from: friendId,
-    createdAt: Timestamp.now(),
+    createdAt: DateTime.now(),
     profilePic: friendProfilePic,
     imgUrl: "",
     seen: false,

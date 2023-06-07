@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
+
 import 'package:knockme/screens/auth/auth_user_check.dart';
-import 'package:knockme/utils/app_colors.dart';
+
 import 'package:knockme/utils/fb_instance.dart';
+import 'package:knockme/widgets/confirmation_model.dart';
 
 void registerUser(
     {required String username,
@@ -37,30 +38,19 @@ void registerUser(
         Navigator.pushNamed(context, CheckAuthUser.routeName);
       },
     );
-
-    Get.snackbar(
-      "KnockMe app",
-      "Registation succesfull",
-      backgroundColor: AppColors.buttonColor,
-    );
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
-      Get.snackbar(
-        "KnockMe app",
-        "The password provided is too weak.",
-        backgroundColor: AppColors.authBackgroundColor,
-      );
+      alertUser(
+          context: context, alertText: "The password provided is too weak.");
     } else if (e.code == 'email-already-in-use') {
-      Get.snackbar(
-        "KnockMe app",
-        "The account already exists for that email.",
-        backgroundColor: AppColors.authBackgroundColor,
-      );
+      alertUser(
+          context: context,
+          alertText: "The account already exists for that email.");
     }
   }
 }
 
-void loginUser(String email, String password, BuildContext context) async {
+void loginUserFb(String email, String password, BuildContext context) async {
   try {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(
@@ -68,25 +58,11 @@ void loginUser(String email, String password, BuildContext context) async {
           password: password,
         )
         .then((_) => {Navigator.pushNamed(context, CheckAuthUser.routeName)});
-
-    Get.snackbar(
-      "KnockMe app",
-      "Login succesfull",
-      backgroundColor: AppColors.authBackgroundColor,
-    );
   } on FirebaseAuthException catch (e) {
     if (e.code == 'user-not-found') {
-      Get.snackbar(
-        "KnockMe app",
-        "No user found.",
-        backgroundColor: AppColors.buttonColor,
-      );
+      alertUser(context: context, alertText: "No user found.");
     } else if (e.code == 'wrong-password') {
-      Get.snackbar(
-        "KnockMe app",
-        "Wrong email or password!",
-        backgroundColor: AppColors.buttonColor,
-      );
+      alertUser(context: context, alertText: "Wrong email or password!");
     }
   }
 }

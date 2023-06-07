@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
 
 import 'dart:io';
 
@@ -6,8 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:knockme/features/auth_fb.dart';
 import 'package:knockme/features/fb_storage.dart';
 import 'package:knockme/models/group_model.dart';
@@ -134,7 +132,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
           memberDetails: selectedFriends,
           lastMsg: "",
           members: selectedFriendsId,
-          createdAt: Timestamp.now(),
+          createdAt: DateTime.now(),
           adminId: FirebaseAuth.instance.currentUser!.uid,
           adminDetails: user,
           groupImg: url,

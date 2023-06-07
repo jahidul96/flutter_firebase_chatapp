@@ -1,18 +1,13 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:intl/intl.dart';
 import 'package:knockme/models/chat_model.dart';
 import 'package:knockme/models/user_model.dart';
 import 'package:knockme/screens/chat_screen.dart';
 import 'package:knockme/screens/contacts.dart';
 import 'package:knockme/utils/app_colors.dart';
-import 'package:knockme/utils/asset_files.dart';
 import 'package:knockme/utils/fb_instance.dart';
 import 'package:knockme/widgets/confirmation_model.dart';
 import 'package:knockme/widgets/chat_show_profile.dart';
@@ -103,7 +98,7 @@ class _ChatTabCompState extends State<ChatTabComp> {
                     name: chat.username,
                     lastMsg: chat.lastMsg,
                     dateShow: true,
-                    createdAt: chat.createdAt.toDate(),
+                    createdAt: chat.createdAt,
                   );
 
                   // return chatItem(

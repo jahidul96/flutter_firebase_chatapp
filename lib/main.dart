@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:knockme/screens/auth/auth_user_check.dart';
 import 'package:knockme/screens/auth/login.dart';
 import 'package:knockme/screens/auth/register.dart';
@@ -21,11 +20,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Knockme chatapp',
       theme: ThemeData(
-        backgroundColor: AppColors.whiteColor,
         scaffoldBackgroundColor: AppColors.whiteColor,
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.appbarColor,

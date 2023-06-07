@@ -10,12 +10,12 @@ import 'package:knockme/features/chat_func.dart';
 import 'package:knockme/features/fb_storage.dart';
 import 'package:knockme/models/message_model.dart';
 import 'package:knockme/models/user_model.dart';
+import 'package:knockme/screens/chat/chat_widgets.dart';
 import 'package:knockme/utils/asset_files.dart';
 import 'package:knockme/utils/fb_instance.dart';
-import 'package:knockme/widgets/chat/chat_bottom_comp.dart';
-import 'package:knockme/widgets/chat/message_comp.dart';
 import 'package:knockme/widgets/file_send_comp.dart';
 import 'package:knockme/widgets/text_comp.dart';
+import 'package:knockme/screens/chat/message_comp.dart';
 
 class ChatScreen extends StatefulWidget {
   static const routeName = "chatscreen";
@@ -230,7 +230,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 6, horizontal: 5),
-                    child: ChatBottomComp(
+                    child: chatBottomComp(
                       onTap: () => chat(),
                       textController: textController,
                       pickImage: () => pickFromGallery(),

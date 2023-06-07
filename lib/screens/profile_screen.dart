@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:knockme/screens/auth/auth_user_check.dart';
 import 'package:knockme/utils/app_colors.dart';
-import 'package:knockme/utils/asset_files.dart';
 import 'package:knockme/widgets/text_comp.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -129,8 +127,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 FirebaseAuth.instance.signOut();
                                 Navigator.pushNamed(
                                     context, CheckAuthUser.routeName);
-                                Get.snackbar("Knockme App", "Logout succesfull",
-                                    backgroundColor: AppColors.buttonColor);
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.buttonColor,

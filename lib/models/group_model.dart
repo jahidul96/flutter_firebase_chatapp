@@ -10,7 +10,7 @@ class GroupModel {
   List members;
   List<UserModel> memberDetails;
   UserModel adminDetails;
-  Timestamp createdAt;
+  DateTime createdAt;
   String adminId;
   String groupImg;
   bool seen;
@@ -21,12 +21,12 @@ class GroupModel {
     required this.lastMsg,
     required this.members,
     required this.memberDetails,
+    required this.adminDetails,
     required this.createdAt,
     required this.adminId,
     required this.groupImg,
     required this.seen,
     required this.senderId,
-    required this.adminDetails,
     required this.justCreated,
   });
 
@@ -37,7 +37,7 @@ class GroupModel {
       'members': members,
       'memberDetails': memberDetails.map((x) => x.toMap()).toList(),
       'adminDetails': adminDetails.toMap(),
-      'createdAt': createdAt,
+      'createdAt': createdAt.millisecondsSinceEpoch,
       'adminId': adminId,
       'groupImg': groupImg,
       'seen': seen,
@@ -54,7 +54,7 @@ class GroupModel {
       memberDetails: List<UserModel>.from(
           map['memberDetails']?.map((x) => UserModel.fromMap(x))),
       adminDetails: UserModel.fromMap(map['adminDetails']),
-      createdAt: map['createdAt'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
       adminId: map['adminId'] ?? '',
       groupImg: map['groupImg'] ?? '',
       seen: map['seen'] ?? false,

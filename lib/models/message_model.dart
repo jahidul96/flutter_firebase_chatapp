@@ -5,11 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MessageModel {
   String text;
   String senderId;
-  Timestamp createdAt;
+  DateTime createdAt;
   String imgUrl;
   String senderProfilePic;
   String senderUsername;
-
   MessageModel({
     required this.text,
     required this.senderId,
@@ -23,7 +22,7 @@ class MessageModel {
     return {
       'text': text,
       'senderId': senderId,
-      'createdAt': createdAt,
+      'createdAt': createdAt.millisecondsSinceEpoch,
       'imgUrl': imgUrl,
       'senderProfilePic': senderProfilePic,
       'senderUsername': senderUsername,
@@ -34,10 +33,15 @@ class MessageModel {
     return MessageModel(
       text: map['text'] ?? '',
       senderId: map['senderId'] ?? '',
-      createdAt: map['createdAt'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
       imgUrl: map['imgUrl'] ?? '',
       senderProfilePic: map['senderProfilePic'] ?? '',
       senderUsername: map['senderUsername'] ?? '',
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory MessageModel.fromJson(String source) =>
+      MessageModel.fromMap(json.decode(source));
 }

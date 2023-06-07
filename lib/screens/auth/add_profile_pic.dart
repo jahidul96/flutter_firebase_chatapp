@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_clause
+// ignore_for_file: unused_catch_clause, use_build_context_synchronously, avoid_print
 
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -81,88 +81,82 @@ class _AddProfilePicScreenState extends State<AddProfilePicScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.authBackgroundColor,
+      backgroundColor: AppColors.lightGrey,
       body: SafeArea(
-          child: Column(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 50),
-              _image != null
-                  ? GestureDetector(
-                      onTap: () => pickFromGallery(),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image.file(
-                          _image!,
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )
-                  : Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () => pickFromGallery(),
-                          child: Stack(
-                            children: [
-                              Opacity(
-                                opacity: 0.8,
-                                child: Image.asset(
-                                  AssetFiles.person,
-                                  width: 80,
-                                  height: 80,
-                                  color: AppColors.whiteColor,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              const Positioned(
-                                top: 30,
-                                left: 27,
-                                child: Icon(
-                                  Icons.camera_alt,
-                                  color: AppColors.whiteColor,
-                                ),
-                              ),
-                            ],
+        child: Column(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 50),
+                _image != null
+                    ? GestureDetector(
+                        onTap: () => pickFromGallery(),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image.file(
+                            _image!,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        TextComp(
-                          text: "Click on Avator to choose a photo",
-                          size: 12,
-                        ),
-                      ],
-                    ),
-              loading
-                  ? Center(
-                      child: Column(
+                      )
+                    : Column(
                         children: [
-                          const SizedBox(
-                            height: 40,
+                          GestureDetector(
+                              onTap: () => pickFromGallery(),
+                              child: Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: AppColors.black,
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    size: 30,
+                                    color: AppColors.whiteColor,
+                                  ),
+                                ),
+                              )),
+                          const SizedBox(height: 10),
+                          TextComp(
+                            text: "Click on Avator to choose a photo",
+                            size: 12,
+                            color: AppColors.black,
                           ),
-                          const CircularProgressIndicator(),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          TextComp(text: "Creating Account Wait...")
                         ],
                       ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 20),
-                      child: CustomButton(
-                        text: "Create Account",
-                        onPressed: () => createAcount(),
-                      ),
-                    )
-            ],
-          )
-        ],
-      )),
+                loading
+                    ? Center(
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            const CircularProgressIndicator(),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            TextComp(text: "Creating Account Wait...")
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 20),
+                        child: CustomButton(
+                          text: "Create Account",
+                          onPressed: () => createAcount(),
+                        ),
+                      )
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }

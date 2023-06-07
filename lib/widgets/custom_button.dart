@@ -12,7 +12,7 @@ class CustomButton extends StatelessWidget {
       {super.key,
       required this.text,
       required this.onPressed,
-      this.borderRadius = 30});
+      this.borderRadius = 10});
 
   @override
   Widget build(BuildContext context) {

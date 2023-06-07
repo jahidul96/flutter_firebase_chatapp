@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:knockme/features/auth_fb.dart';
 import 'package:knockme/screens/auth/register.dart';
 import 'package:knockme/utils/app_colors.dart';
+import 'package:knockme/widgets/confirmation_model.dart';
 import 'package:knockme/widgets/custom_button.dart';
 import 'package:knockme/widgets/text_comp.dart';
 import 'package:knockme/widgets/text_input_container.dart';
@@ -18,10 +19,18 @@ class _LoginScreenState extends State<LoginScreen> {
   bool loading = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  login() {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      return alertUser(context: context, alertText: "Fill all the filed's");
+    }
+    loginUserFb(emailController.text, passwordController.text, context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.authBackgroundColor,
+      backgroundColor: AppColors.lightGrey,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(
@@ -31,10 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Icon(
                 Icons.lock,
                 size: 50,
-                color: AppColors.whiteColor,
+                color: AppColors.black,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
 
             // input containers
 
@@ -53,13 +62,13 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 15),
             CustomButton(
               text: "SIGN IN",
-              onPressed: () => loginUser(
-                  emailController.text, passwordController.text, context),
+              onPressed: () => login(),
             ),
             const SizedBox(height: 15),
             TextComp(
               text: "Don't Have Account?",
               size: 15,
+              color: AppColors.black,
             ),
 
             const SizedBox(height: 8),
@@ -71,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: "Register Here!",
                 fontweight: FontWeight.normal,
                 size: 15,
+                color: AppColors.black,
               ),
             ),
           ],

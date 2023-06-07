@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:knockme/models/group_model.dart';
 import 'package:knockme/screens/create_group.dart';
 import 'package:knockme/screens/group_chat_screen.dart';
@@ -85,7 +84,7 @@ class _GroupTabCompState extends State<GroupTabComp> {
                   name: group.groupName,
                   lastMsg: group.lastMsg,
                   dateShow: true,
-                  createdAt: group.createdAt.toDate(),
+                  createdAt: group.createdAt,
                   isNewMessage: FirebaseAuth.instance.currentUser!.uid !=
                               group.senderId &&
                           group.seen == false

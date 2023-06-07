@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:knockme/screens/contacts.dart';
 import 'package:knockme/screens/profile_screen.dart';
 import 'package:knockme/utils/app_colors.dart';
 import 'package:knockme/widgets/tabview_items/chat_tab_content.dart';

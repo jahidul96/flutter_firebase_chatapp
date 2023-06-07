@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:knockme/utils/app_colors.dart';
 import 'package:knockme/widgets/text_comp.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 Widget chatShowProfile({
   Function()? onTap,
@@ -95,9 +96,7 @@ Widget chatShowProfile({
                                     )
                                   : Container(),
                               Text(
-                                DateFormat.Hm().format(
-                                  createdAt!,
-                                ),
+                                timeago.format(createdAt!, locale: 'en_short'),
                               ),
                             ],
                           )

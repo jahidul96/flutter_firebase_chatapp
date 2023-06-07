@@ -1,8 +1,12 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:knockme/models/message_model.dart';
 import 'package:knockme/utils/app_colors.dart';
+import 'package:knockme/widgets/text_comp.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class MessageComp extends StatelessWidget {
   MessageModel messageModel;
@@ -97,27 +101,23 @@ class MessageComp extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 30),
-                child: Text(
-                  messageModel.text,
-                  style: TextStyle(
-                    color: messageModel.senderId == authUser.currentUser!.uid
-                        ? AppColors.whiteColor
-                        : AppColors.black,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              Text(
-                DateFormat.Hm().format(
-                  messageModel.createdAt.toDate(),
-                ),
-                style: TextStyle(
+                child: TextComp(
+                  text: messageModel.text,
                   color: messageModel.senderId == authUser.currentUser!.uid
                       ? AppColors.whiteColor
-                      : AppColors.greyColor,
-                  fontSize: 10,
+                      : AppColors.black,
+                  size: 14,
+                  fontweight: FontWeight.normal,
                 ),
-                textAlign: TextAlign.end,
+              ),
+              TextComp(
+                text:
+                    timeago.format(messageModel.createdAt, locale: 'en_short'),
+                size: 9,
+                fontweight: FontWeight.normal,
+                color: messageModel.senderId == authUser.currentUser!.uid
+                    ? AppColors.whiteColor
+                    : AppColors.black,
               ),
             ],
           ),
@@ -144,7 +144,7 @@ class MessageComp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 40),
+                padding: const EdgeInsets.only(right: 30),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
@@ -156,9 +156,7 @@ class MessageComp extends StatelessWidget {
                 ),
               ),
               Text(
-                DateFormat.Hm().format(
-                  messageModel.createdAt.toDate(),
-                ),
+                timeago.format(messageModel.createdAt, locale: 'en_short'),
                 style: TextStyle(
                   color: messageModel.senderId == authUser.currentUser!.uid
                       ? AppColors.whiteColor

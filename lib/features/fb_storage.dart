@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -27,7 +29,8 @@ Future uploadFile({
 
 Future pickImage() async {
   try {
-    final img = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final img = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 25);
     if (img == null) return;
     final tempImg = File(img.path);
 

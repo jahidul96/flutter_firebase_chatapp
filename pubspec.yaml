@@ -38,10 +38,12 @@ dependencies:
   firebase_core: ^2.7.1
   firebase_auth: ^4.2.10
   cloud_firestore: ^4.4.4
-  get: ^4.6.5
-  intl: ^0.17.0
+  intl: ^0.18.0
   image_picker: ^0.8.7
   firebase_storage: ^11.0.16
+  timeago: ^3.4.0
+  cached_network_image: ^3.2.3
+  loading_animation_widget: ^1.2.0+4
 
 dev_dependencies:
   flutter_test:

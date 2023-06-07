@@ -2,7 +2,7 @@
 
 # Config
 
-- I have removed my google json file so if you want to run it on your maching
+- I have removed my google json file so if you want to run it on your machine
   create a firebase project and put your one on android/app folder
 - you also need to change your pacakage name as well as other requirement what
   firebase ask for hope you know that staff.

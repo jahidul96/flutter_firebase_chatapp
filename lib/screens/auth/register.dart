@@ -22,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passwordController = TextEditingController();
 
 // profile pic adding function!!
-  addProfilePic(BuildContext context) {
+  addProfilePic() {
     if (emailController.text.isEmpty ||
         passwordController.text.isEmpty ||
         usernameController.text.isEmpty) {
@@ -41,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.authBackgroundColor,
+      backgroundColor: AppColors.lightGrey,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(
@@ -51,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Icon(
                 Icons.lock,
                 size: 50,
-                color: AppColors.whiteColor,
+                color: AppColors.black,
               ),
             ),
             const SizedBox(height: 20),
@@ -77,12 +77,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 15),
             CustomButton(
               text: "NEXT",
-              onPressed: () => addProfilePic(context),
+              onPressed: () => addProfilePic(),
             ),
             const SizedBox(height: 15),
 
             TextComp(
               text: "Already Have Account?",
+              color: AppColors.black,
               size: 15,
             ),
 
@@ -93,6 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
               child: TextComp(
                 text: "Login Here!",
+                color: AppColors.black,
                 size: 15,
                 fontweight: FontWeight.normal,
               ),

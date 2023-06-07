@@ -1,6 +1,7 @@
-// ignore_for_file: must_be_immutable, unused_local_variable
+// ignore_for_file: must_be_immutable, unused_local_variable, avoid_print, depend_on_referenced_packages
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -10,16 +11,15 @@ import 'package:knockme/features/fb_storage.dart';
 import 'package:knockme/models/group_model.dart';
 import 'package:knockme/models/message_model.dart';
 import 'package:knockme/models/user_model.dart';
+import 'package:knockme/screens/chat/chat_widgets.dart';
 import 'package:knockme/screens/group_members_details.dart';
 import 'package:knockme/utils/asset_files.dart';
 import 'package:knockme/utils/fb_instance.dart';
-import 'package:knockme/widgets/chat/chat_bottom_comp.dart';
-import 'package:knockme/widgets/chat/message_comp.dart';
-import 'package:knockme/widgets/confirmation_model.dart';
 import 'package:knockme/widgets/text_comp.dart';
 import 'package:path/path.dart' as p;
 
 import '../widgets/file_send_comp.dart';
+import 'chat/message_comp.dart';
 
 class GroupChatScreen extends StatefulWidget {
   static const routeName = "GroupChatScreen";
@@ -74,15 +74,53 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   }
 
 // send msg
-  sendMsg() {
-    groupChat(
-        text: textController.text.isEmpty ? "" : textController.text,
+  sendMsg() async {
+    var msgData = MessageModel(
+        text: "",
         senderId: FirebaseAuth.instance.currentUser!.uid,
+        createdAt: DateTime.now(),
+        imgUrl: "",
         senderProfilePic: user["profilePic"],
-        senderUsername: user["username"],
-        image: _image,
-        context: context,
-        groupId: widget.groupId);
+        senderUsername: user["username"]);
+
+    if (_image != null) {
+      // image upload process to fb bucket!!
+      String fileName = p.basename(_image!.path);
+      String imagePath = 'messageImages/${DateTime.now()}$fileName';
+
+      try {
+        var url = await uploadFile(
+            fileName: fileName,
+            image: _image,
+            imagePath: imagePath,
+            context: context);
+
+        msgData.imgUrl = url;
+
+        groupChat(
+            msgData: msgData,
+            groupId: widget.groupId,
+            senderId: FirebaseAuth.instance.currentUser!.uid,
+            text: textController.text);
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      msgData.text = textController.text;
+      groupChat(
+          msgData: msgData,
+          groupId: widget.groupId,
+          senderId: FirebaseAuth.instance.currentUser!.uid,
+          text: textController.text);
+    }
+    // groupChat(
+    //     text: textController.text.isEmpty ? "" : textController.text,
+    //     senderId: FirebaseAuth.instance.currentUser!.uid,
+    //     senderProfilePic: user["profilePic"],
+    //     senderUsername: user["username"],
+    //     image: _image,
+    //     context: context,
+    //     groupId: widget.groupId);
 
     setState(() {
       _image = null;
@@ -245,7 +283,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 6, horizontal: 5),
-                    child: ChatBottomComp(
+                    child: chatBottomComp(
                       onTap: () => sendMsg(),
                       textController: textController,
                       pickImage: () => pickFromGallery(),
