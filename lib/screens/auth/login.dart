@@ -67,19 +67,18 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 15),
             TextComp(
               text: "Don't Have Account?",
-              size: 15,
+              size: 16,
               color: AppColors.black,
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, RegisterScreen.routeName);
               },
               child: TextComp(
                 text: "Register Here!",
-                fontweight: FontWeight.normal,
-                size: 15,
+                size: 18,
                 color: AppColors.black,
               ),
             ),

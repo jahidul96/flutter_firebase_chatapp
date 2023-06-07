@@ -10,7 +10,6 @@ import 'package:knockme/widgets/confirmation_model.dart';
 final storageRef = FirebaseStorage.instance.ref();
 
 Future uploadFile({
-  required String fileName,
   required File? image,
   required String imagePath,
   required BuildContext context,

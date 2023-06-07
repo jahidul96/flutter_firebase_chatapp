@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, unused_local_variable
+// ignore_for_file: must_be_immutable, unused_local_variable, depend_on_referenced_packages, unused_import
 
 import 'dart:io';
 
@@ -10,12 +10,15 @@ import 'package:knockme/features/chat_func.dart';
 import 'package:knockme/features/fb_storage.dart';
 import 'package:knockme/models/message_model.dart';
 import 'package:knockme/models/user_model.dart';
+import 'package:knockme/provider/user_provider.dart';
 import 'package:knockme/screens/chat/chat_widgets.dart';
 import 'package:knockme/utils/asset_files.dart';
 import 'package:knockme/utils/fb_instance.dart';
 import 'package:knockme/widgets/file_send_comp.dart';
 import 'package:knockme/widgets/text_comp.dart';
 import 'package:knockme/screens/chat/message_comp.dart';
+import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   static const routeName = "chatscreen";
@@ -32,7 +35,6 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController textController = TextEditingController();
-  late UserModel user;
 
   FirebaseAuth authUser = FirebaseAuth.instance;
   final storageRef = FirebaseStorage.instance.ref();
@@ -49,17 +51,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    super.initState();
-    getUserData();
     seenMsg();
-  }
-
-  // get myData
-  void getUserData() async {
-    var data = await getMyData();
-    setState(() {
-      user = UserModel.fromMap(data);
-    });
+    super.initState();
   }
 
   // seen msg!
@@ -74,11 +67,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
 // one to one chat functions
   void chat() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     onToOneChat(
         text: textController.text.isEmpty ? "" : textController.text,
         senderId: authUser.currentUser!.uid,
-        senderProfilePic: user.profilePic,
-        senderUsername: user.username,
+        senderProfilePic: userProvider.user.profilePic,
+        senderUsername: userProvider.user.username,
         friendId: widget.userData.id,
         friendUsername: widget.userData.username,
         friendProfilePic: widget.userData.profilePic,

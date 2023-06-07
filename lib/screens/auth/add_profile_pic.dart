@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_clause, use_build_context_synchronously, avoid_print
+// ignore_for_file: unused_catch_clause, use_build_context_synchronously, avoid_print, must_be_immutable, depend_on_referenced_packages
 
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../utils/app_colors.dart';
-import '../../utils/asset_files.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/text_comp.dart';
 
@@ -61,10 +60,7 @@ class _AddProfilePicScreenState extends State<AddProfilePicScreen> {
     String imagePath = 'profileImages/${DateTime.now()}$fileName';
 
     var url = await uploadFile(
-        fileName: fileName,
-        image: _image!,
-        imagePath: imagePath,
-        context: context);
+        image: _image!, imagePath: imagePath, context: context);
 
     registerUser(
         username: widget.username,

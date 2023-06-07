@@ -8,10 +8,11 @@ import 'package:knockme/models/user_model.dart';
 import 'package:knockme/screens/chat_screen.dart';
 import 'package:knockme/screens/contacts.dart';
 import 'package:knockme/utils/app_colors.dart';
-import 'package:knockme/utils/fb_instance.dart';
 import 'package:knockme/widgets/confirmation_model.dart';
 import 'package:knockme/widgets/chat_show_profile.dart';
 import 'package:knockme/widgets/text_comp.dart';
+
+import '../../features/fb_firesore.dart';
 
 class ChatTabComp extends StatefulWidget {
   const ChatTabComp({super.key});
@@ -63,6 +64,12 @@ class _ChatTabCompState extends State<ChatTabComp> {
                   var chatId = data[index].id;
 
                   return chatShowProfile(
+                    isNewMessage: chat.seen,
+                    profileImg: chat.profilePic,
+                    name: chat.username,
+                    lastMsg: chat.lastMsg,
+                    dateShow: true,
+                    createdAt: chat.createdAt,
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -83,22 +90,11 @@ class _ChatTabCompState extends State<ChatTabComp> {
                         context: context,
                         infoText: "Want to delete This Chat?",
                         confirmFunc: () {
-                          db
-                              .collection("users")
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .collection("chats")
-                              .doc(chatId)
-                              .delete();
+                          deleteChat(chatId: chatId);
                           Navigator.pop(context);
                         },
                       );
                     },
-                    isNewMessage: chat.seen,
-                    profileImg: chat.profilePic,
-                    name: chat.username,
-                    lastMsg: chat.lastMsg,
-                    dateShow: true,
-                    createdAt: chat.createdAt,
                   );
 
                   // return chatItem(

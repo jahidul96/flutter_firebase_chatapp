@@ -1,22 +1,22 @@
 // ignore_for_file: must_be_immutable, unused_local_variable, avoid_print, depend_on_referenced_packages
 
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:knockme/features/auth_fb.dart';
 import 'package:knockme/features/chat_func.dart';
 import 'package:knockme/features/fb_storage.dart';
 import 'package:knockme/models/group_model.dart';
 import 'package:knockme/models/message_model.dart';
 import 'package:knockme/models/user_model.dart';
+import 'package:knockme/provider/user_provider.dart';
 import 'package:knockme/screens/chat/chat_widgets.dart';
 import 'package:knockme/screens/group_members_details.dart';
 import 'package:knockme/utils/asset_files.dart';
 import 'package:knockme/utils/fb_instance.dart';
 import 'package:knockme/widgets/text_comp.dart';
 import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
 
 import '../widgets/file_send_comp.dart';
 import 'chat/message_comp.dart';
@@ -44,7 +44,6 @@ class GroupChatScreen extends StatefulWidget {
 
 class _GroupChatScreenState extends State<GroupChatScreen> {
   TextEditingController textController = TextEditingController();
-  Map<String, dynamic> user = {};
 
   FirebaseAuth authUser = FirebaseAuth.instance;
   final storageRef = FirebaseStorage.instance.ref();
@@ -59,29 +58,16 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getUserData();
-  }
-
-  // get myData
-  void getUserData() async {
-    var data = await getMyData();
-    setState(() {
-      user = data;
-    });
-  }
-
 // send msg
   sendMsg() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     var msgData = MessageModel(
         text: "",
         senderId: FirebaseAuth.instance.currentUser!.uid,
         createdAt: DateTime.now(),
         imgUrl: "",
-        senderProfilePic: user["profilePic"],
-        senderUsername: user["username"]);
+        senderProfilePic: userProvider.user.profilePic,
+        senderUsername: userProvider.user.username);
 
     if (_image != null) {
       // image upload process to fb bucket!!
@@ -90,10 +76,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
       try {
         var url = await uploadFile(
-            fileName: fileName,
-            image: _image,
-            imagePath: imagePath,
-            context: context);
+            image: _image, imagePath: imagePath, context: context);
 
         msgData.imgUrl = url;
 

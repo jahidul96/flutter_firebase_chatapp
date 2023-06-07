@@ -38,60 +38,6 @@ groupChat({
   }
 }
 
-// groupChat Function
-// void groupChat({
-//   required String text,
-//   required String senderId,
-//   required String senderProfilePic,
-//   required String senderUsername,
-//   required File? image,
-//   required BuildContext context,
-//   required String groupId,
-// }) async {
-//   // msg data
-//   var msgdata = MessageModel(
-//     text: text,
-//     senderId: senderId,
-//     createdAt: Timestamp.now(),
-//     imgUrl: "",
-//     senderProfilePic: senderProfilePic,
-//     senderUsername: senderUsername,
-//   );
-
-//   if (image != null) {
-//     String fileName = p.basename(image.path);
-
-//     var imagePath = 'groupImages/${DateTime.now()}$fileName';
-
-//     var url = await uploadFile(
-//         fileName: fileName,
-//         image: image,
-//         imagePath: imagePath,
-//         context: context);
-
-//     msgdata.imgUrl = url;
-
-//     await db
-//         .collection("groups")
-//         .doc(groupId)
-//         .collection("messages")
-//         .add(msgdata.toMap());
-//   } else {
-//     await db
-//         .collection("groups")
-//         .doc(groupId)
-//         .collection("messages")
-//         .add(msgdata.toMap());
-//   }
-
-//   await db.collection("groups").doc(groupId).update({
-//     "lastMsg": text,
-//     "seen": false,
-//     "justCreated": false,
-//     "senderId": senderId,
-//   });
-// }
-
 // one to one chat functions
 void onToOneChat({
   required String text,
@@ -114,7 +60,7 @@ void onToOneChat({
       senderUsername: senderUsername);
 
   // infriend db chats data/lastmsg data
-  var friendChats = ChatModel(
+  var friendChat = ChatModel(
     username: senderUsername,
     lastMsg: text,
     from: senderId,
@@ -125,7 +71,7 @@ void onToOneChat({
   );
 
   // in my db chats data/lastmsg data
-  var myChats = ChatModel(
+  var myChat = ChatModel(
     username: friendUsername,
     lastMsg: text,
     from: friendId,
@@ -136,79 +82,72 @@ void onToOneChat({
   );
 
   if (image != null) {
-    String fileName = p.basename(image!.path);
+    String fileName = p.basename(image.path);
 
     var imagePath = 'chatImages/${DateTime.now()}$fileName';
 
-    var url = await uploadFile(
-        fileName: fileName,
-        image: image,
-        imagePath: imagePath,
-        context: context);
+    var url =
+        await uploadFile(image: image, imagePath: imagePath, context: context);
 
 // adding imgurl
     msgdata.imgUrl = url;
-    friendChats.imgUrl = url;
-    myChats.imgUrl = url;
+    friendChat.imgUrl = url;
+    myChat.imgUrl = url;
 
     //in my db add chat
-    addOneToOneChatToDb(
-        firstId: senderId, secondId: friendId, chatData: myChats.toMap());
+    createOneToOneChat(
+        userId: senderId, chatDocId: friendId, chatData: myChat.toMap());
 
     //in my db add msg
-    addOneToOneMessgageToDb(
-        firstId: senderId, secondId: friendId, msgdata: msgdata);
+    addMessage(userId: senderId, chatDocId: friendId, msgdata: msgdata);
 
     // infriends db add chat
-    addOneToOneChatToDb(
-        firstId: friendId, secondId: senderId, chatData: friendChats.toMap());
+    createOneToOneChat(
+        userId: friendId, chatDocId: senderId, chatData: friendChat.toMap());
 
     //infriends db add msg
-    addOneToOneMessgageToDb(
-        firstId: friendId, secondId: senderId, msgdata: msgdata);
+    addMessage(userId: friendId, chatDocId: senderId, msgdata: msgdata);
   } else {
     // infriends db add chat
-    addOneToOneChatToDb(
-        firstId: friendId, secondId: senderId, chatData: friendChats.toMap());
+    createOneToOneChat(
+        userId: friendId, chatDocId: senderId, chatData: friendChat.toMap());
 
     //infriends db add msg
-    addOneToOneMessgageToDb(
-        firstId: friendId, secondId: senderId, msgdata: msgdata);
+    addMessage(userId: friendId, chatDocId: senderId, msgdata: msgdata);
 
     //in my db add chat
-    addOneToOneChatToDb(
-        firstId: senderId, secondId: friendId, chatData: myChats.toMap());
+    createOneToOneChat(
+        userId: senderId, chatDocId: friendId, chatData: myChat.toMap());
 
     //in my db add msg
-    addOneToOneMessgageToDb(
-        firstId: senderId, secondId: friendId, msgdata: msgdata);
+    addMessage(userId: senderId, chatDocId: friendId, msgdata: msgdata);
   }
 }
 
-void addOneToOneChatToDb({
-  required String firstId,
-  required String secondId,
+void createOneToOneChat({
+  required String userId,
+  required String chatDocId,
   required chatData,
 }) {
   db
       .collection("users")
-      .doc(firstId)
+      .doc(userId)
       .collection("chats")
-      .doc(secondId)
+      .doc(chatDocId)
       .set(chatData);
 }
 
 // add msg to db
-void addOneToOneMessgageToDb({
-  required String firstId,
-  required String secondId,
+void addMessage({
+  required String userId,
+  required String chatDocId,
   required MessageModel msgdata,
 }) {
   db
       .collection("users")
-      .doc(firstId)
+      .doc(userId)
       .collection("chats")
-      .doc(secondId)
+      .doc(chatDocId)
       .collection("messages")
       .add(
         msgdata.toMap(),

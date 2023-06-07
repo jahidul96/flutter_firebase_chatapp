@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
+// ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages, avoid_print
 
 import 'dart:io';
 
@@ -122,10 +122,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
       String imagePath = 'groupImages/${DateTime.now()}$fileName';
 
       var url = await uploadFile(
-          fileName: fileName,
-          image: _image,
-          imagePath: imagePath,
-          context: context);
+          image: _image, imagePath: imagePath, context: context);
 
       var grpData = GroupModel(
           groupName: groupnameController.text,

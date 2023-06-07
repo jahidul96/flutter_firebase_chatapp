@@ -84,10 +84,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextComp(
               text: "Already Have Account?",
               color: AppColors.black,
-              size: 15,
+              size: 16,
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, LoginScreen.routeName);
@@ -95,8 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: TextComp(
                 text: "Login Here!",
                 color: AppColors.black,
-                size: 15,
-                fontweight: FontWeight.normal,
+                size: 18,
               ),
             ),
           ],

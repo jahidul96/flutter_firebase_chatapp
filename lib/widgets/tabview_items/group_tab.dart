@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:knockme/features/fb_firesore.dart';
 import 'package:knockme/models/group_model.dart';
 import 'package:knockme/screens/create_group.dart';
 import 'package:knockme/screens/group_chat_screen.dart';
@@ -103,7 +104,7 @@ class _GroupTabCompState extends State<GroupTabComp> {
                           alertUser(
                               context: context, alertText: "You Are Not Admin");
                         } else {
-                          db.collection("groups").doc(groupId).delete();
+                          deleteGroupChat(groupId: groupId);
                           Navigator.pop(context);
                         }
                       },

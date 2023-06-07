@@ -44,6 +44,7 @@ dependencies:
   timeago: ^3.4.0
   cached_network_image: ^3.2.3
   loading_animation_widget: ^1.2.0+4
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:
@@ -82,11 +83,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
+        - asset: assets/fonts/Poppins-Regular.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
