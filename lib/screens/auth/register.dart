@@ -73,6 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               inputController: passwordController,
               icon: Icons.lock,
               hintText: "Password",
+              secureText: true,
             ),
             const SizedBox(height: 15),
             CustomButton(

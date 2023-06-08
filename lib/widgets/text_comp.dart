@@ -25,6 +25,7 @@ class TextComp extends StatelessWidget {
         color: color,
         fontSize: size,
         fontWeight: fontweight,
+        fontFamily: "Poppins",
       ),
       textAlign: align,
     );

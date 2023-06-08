@@ -96,14 +96,6 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           senderId: FirebaseAuth.instance.currentUser!.uid,
           text: textController.text);
     }
-    // groupChat(
-    //     text: textController.text.isEmpty ? "" : textController.text,
-    //     senderId: FirebaseAuth.instance.currentUser!.uid,
-    //     senderProfilePic: user["profilePic"],
-    //     senderUsername: user["username"],
-    //     image: _image,
-    //     context: context,
-    //     groupId: widget.groupId);
 
     setState(() {
       _image = null;

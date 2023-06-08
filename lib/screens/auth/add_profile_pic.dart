@@ -136,7 +136,10 @@ class _AddProfilePicScreenState extends State<AddProfilePicScreen> {
                             const SizedBox(
                               height: 40,
                             ),
-                            TextComp(text: "Creating Account Wait...")
+                            TextComp(
+                              text: "Creating Account Wait...",
+                              color: AppColors.black,
+                            )
                           ],
                         ),
                       )

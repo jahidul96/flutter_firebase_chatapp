@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:knockme/features/auth_fb.dart';
 import 'package:knockme/screens/auth/register.dart';
@@ -24,7 +26,20 @@ class _LoginScreenState extends State<LoginScreen> {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       return alertUser(context: context, alertText: "Fill all the filed's");
     }
-    loginUserFb(emailController.text, passwordController.text, context);
+
+    setState(() {
+      loading = true;
+    });
+
+    Timer(
+      const Duration(seconds: 3),
+      () {
+        loginUserFb(emailController.text, passwordController.text, context);
+        setState(() {
+          loading = false;
+        });
+      },
+    );
   }
 
   @override
@@ -58,30 +73,49 @@ class _LoginScreenState extends State<LoginScreen> {
               inputController: passwordController,
               icon: Icons.lock,
               hintText: "Password",
+              secureText: true,
             ),
-            const SizedBox(height: 15),
-            CustomButton(
-              text: "SIGN IN",
-              onPressed: () => login(),
-            ),
-            const SizedBox(height: 15),
-            TextComp(
-              text: "Don't Have Account?",
-              size: 16,
-              color: AppColors.black,
-            ),
+            const SizedBox(height: 25),
 
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, RegisterScreen.routeName);
-              },
-              child: TextComp(
-                text: "Register Here!",
-                size: 18,
-                color: AppColors.black,
-              ),
-            ),
+            loading
+                ? Column(
+                    children: [
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      const SizedBox(height: 20),
+                      TextComp(
+                        text: "Logging wait...",
+                        color: AppColors.black,
+                      )
+                    ],
+                  )
+                : Column(
+                    children: [
+                      CustomButton(
+                        text: "SIGN IN",
+                        onPressed: () => login(),
+                      ),
+                      const SizedBox(height: 15),
+                      TextComp(
+                        text: "Don't Have Account?",
+                        size: 16,
+                        color: AppColors.black,
+                      ),
+                      const SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, RegisterScreen.routeName);
+                        },
+                        child: TextComp(
+                          text: "Register Here!",
+                          size: 18,
+                          color: AppColors.black,
+                        ),
+                      ),
+                    ],
+                  ),
           ],
         ),
       ),
