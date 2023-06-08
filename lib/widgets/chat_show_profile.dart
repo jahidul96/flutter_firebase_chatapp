@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:knockme/utils/app_colors.dart';
@@ -29,11 +30,19 @@ Widget chatShowProfile({
               // profile image
               ClipRRect(
                 borderRadius: BorderRadius.circular(100),
-                child: Image.network(
-                  profileImg,
+                child: CachedNetworkImage(
+                  imageUrl: profileImg,
                   width: 45,
                   height: 45,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => const Icon(
+                    Icons.image,
+                    size: 35,
+                  ),
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.error,
+                    size: 35,
+                  ),
                 ),
               ),
 

@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -167,7 +168,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
 
             // top content till create button end
             Padding(
@@ -179,26 +180,28 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                     child: _image != null
                         ? GestureDetector(
                             onTap: () => pickFromGallery(),
-                            child: Image.file(
-                              _image!,
-                              width: 160,
-                              height: 80,
-                              fit: BoxFit.cover,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Image.file(
+                                _image!,
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           )
                         : GestureDetector(
                             onTap: () => pickFromGallery(),
                             child: Container(
-                              width: 160,
+                              width: 80,
                               height: 80,
                               decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                              ),
-                              child: Center(
-                                child: TextComp(
-                                  text: "Add Group Photo",
-                                  color: AppColors.greyColor,
-                                  size: 14,
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: AppColors.black,
                                 ),
                               ),
                             ),
@@ -207,30 +210,21 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                   const SizedBox(height: 10),
 
                   //  groupname
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    height: 55,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextField(
-                      controller: groupnameController,
-                      decoration: const InputDecoration(
-                        hintText: "GroupName",
-                        border: InputBorder.none,
-                      ),
+                  TextField(
+                    controller: groupnameController,
+                    decoration: const InputDecoration(
+                      hintText: "GroupName",
+                      // border: InputBorder.none,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
 
                   // add members
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
+                      color: AppColors.lightGrey,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     constraints: const BoxConstraints(
@@ -298,11 +292,14 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                                 );
                               },
                             )
-                          : TextComp(
-                              text: "click on contact and select members",
-                              color: AppColors.greyColor,
-                              fontweight: FontWeight.normal,
-                              size: 14,
+                          : Center(
+                              child: TextComp(
+                                text:
+                                    "click on bottom contact and select members",
+                                color: AppColors.greyColor,
+                                fontweight: FontWeight.normal,
+                                size: 12,
+                              ),
                             ),
                     ),
                   ),
@@ -336,13 +333,22 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                       return ListTile(
                         onTap: () => selectMember(user),
                         leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.network(
-                              user.profilePic,
-                              width: 45,
-                              height: 45,
-                              fit: BoxFit.cover,
-                            )),
+                          borderRadius: BorderRadius.circular(100),
+                          child: CachedNetworkImage(
+                            imageUrl: user.profilePic,
+                            width: 45,
+                            height: 45,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Icon(
+                              Icons.image,
+                              size: 35,
+                            ),
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.error,
+                              size: 35,
+                            ),
+                          ),
+                        ),
                         title: Text(
                           user.username,
                         ),
