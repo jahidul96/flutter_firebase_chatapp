@@ -96,6 +96,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             username: contact.username,
                             profilePic: contact.profilePic,
                             bio: contact.bio,
+                            pushToken: contact.pushToken,
                           ),
                         ),
                       ),

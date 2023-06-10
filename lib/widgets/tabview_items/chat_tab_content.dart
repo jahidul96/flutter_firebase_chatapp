@@ -80,6 +80,7 @@ class _ChatTabCompState extends State<ChatTabComp> {
                               username: chat.username,
                               profilePic: chat.profilePic,
                               bio: "",
+                              pushToken: chat.pushToken,
                             ),
                           ),
                         ),

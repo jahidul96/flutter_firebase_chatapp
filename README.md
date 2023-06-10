@@ -10,6 +10,9 @@
 
 # App Features
 
+- push notification using firebase!(it's just for testing purpose any one
+  uninstall and login he will pace push notification not working because it's
+  not handled for uninstall for now.)
 - For simplicity used email/password auth!.
 - one to one chat
 - Realtime with firebase realtime snapshot update

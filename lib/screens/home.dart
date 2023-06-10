@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knockme/features/auth_fb.dart';
 import 'package:knockme/models/user_model.dart';
@@ -12,6 +14,9 @@ import 'package:knockme/widgets/tabview_items/group_tab.dart';
 import 'package:knockme/widgets/text_comp.dart';
 import 'package:provider/provider.dart';
 
+import '../features/fb_firesore.dart';
+import '../features/push_notification.dart';
+
 class HomeScreen extends StatefulWidget {
   static const routeName = "home";
   const HomeScreen({super.key});
@@ -21,10 +26,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  NotificationServices notificationServices = NotificationServices();
   @override
   void initState() {
     getUserData();
+    updatePushToken();
+    notificationServices.requestPermissonNotification();
+    notificationServices.firebaseInit();
+    getTokenTT();
     super.initState();
+  }
+
+  getTokenTT() async {
+    var str = await notificationServices.getToken();
+    print(str);
   }
 
   getUserData() async {

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:knockme/features/push_notification.dart';
+import 'package:knockme/models/user_model.dart';
 
 import 'package:knockme/screens/auth/auth_user_check.dart';
 
@@ -23,18 +25,20 @@ void registerUser(
       password: password,
     );
 
-    Map<String, dynamic> userData = {
-      "username": username.toLowerCase(),
-      "email": email.toLowerCase(),
-      "id": credential.user!.uid,
-      "profilePic": profileUrl,
-      "bio": "hey there i am using chatapp!"
-    };
+    var pushToken = await NotificationServices().getToken();
+
+    var data = UserModel(
+        id: credential.user!.uid,
+        username: username,
+        email: email,
+        profilePic: profileUrl,
+        bio: "hey there i am using chatapp!",
+        pushToken: pushToken);
 
     FirebaseFirestore.instance
         .collection("users")
         .doc(credential.user!.uid)
-        .set(userData)
+        .set(data.toMap())
         .then(
       (value) {
         Navigator.pushNamed(context, CheckAuthUser.routeName);

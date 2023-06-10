@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 class UserModel {
   String id;
   String username;
   String email;
   String profilePic;
   String bio;
+  String pushToken;
 
   UserModel({
     required this.id,
@@ -11,6 +14,7 @@ class UserModel {
     required this.email,
     required this.profilePic,
     required this.bio,
+    required this.pushToken,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +24,7 @@ class UserModel {
       'email': email,
       'profilePic': profilePic,
       'bio': bio,
+      'pushToken': pushToken,
     };
   }
 
@@ -30,6 +35,12 @@ class UserModel {
       email: map['email'] ?? '',
       profilePic: map['profilePic'] ?? '',
       bio: map['bio'] ?? '',
+      pushToken: map['pushToken'] ?? '',
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
 }

@@ -1,6 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages, avoid_print
 
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -11,6 +13,7 @@ import 'package:knockme/utils/fb_instance.dart';
 import '../models/chat_model.dart';
 import '../models/message_model.dart';
 import 'package:path/path.dart' as p;
+import 'package:http/http.dart' as http;
 
 groupChat({
   required MessageModel msgData,
@@ -49,6 +52,8 @@ void onToOneChat({
   required String friendProfilePic,
   required File? image,
   required BuildContext context,
+  required String friendPushToken,
+  required String userPushToken,
 }) async {
   // msg data
   var msgdata = MessageModel(
@@ -61,25 +66,25 @@ void onToOneChat({
 
   // infriend db chats data/lastmsg data
   var friendChat = ChatModel(
-    username: senderUsername,
-    lastMsg: text,
-    from: senderId,
-    createdAt: DateTime.now(),
-    profilePic: senderProfilePic,
-    imgUrl: "",
-    seen: true,
-  );
+      username: senderUsername,
+      lastMsg: text,
+      from: senderId,
+      createdAt: DateTime.now(),
+      profilePic: senderProfilePic,
+      imgUrl: "",
+      seen: true,
+      pushToken: userPushToken);
 
   // in my db chats data/lastmsg data
   var myChat = ChatModel(
-    username: friendUsername,
-    lastMsg: text,
-    from: friendId,
-    createdAt: DateTime.now(),
-    profilePic: friendProfilePic,
-    imgUrl: "",
-    seen: false,
-  );
+      username: friendUsername,
+      lastMsg: text,
+      from: friendId,
+      createdAt: DateTime.now(),
+      profilePic: friendProfilePic,
+      imgUrl: "",
+      seen: false,
+      pushToken: friendPushToken);
 
   if (image != null) {
     String fileName = p.basename(image.path);
@@ -107,6 +112,12 @@ void onToOneChat({
 
     //infriends db add msg
     addMessage(userId: friendId, chatDocId: senderId, msgdata: msgdata);
+
+// sending push notifiaction
+    sendPushNotificationToUser(
+        message: "an image send",
+        pushToken: friendPushToken,
+        title: senderUsername);
   } else {
     // infriends db add chat
     createOneToOneChat(
@@ -121,6 +132,10 @@ void onToOneChat({
 
     //in my db add msg
     addMessage(userId: senderId, chatDocId: friendId, msgdata: msgdata);
+
+// sending push notification
+    sendPushNotificationToUser(
+        message: text, pushToken: friendPushToken, title: senderUsername);
   }
 }
 
@@ -152,4 +167,35 @@ void addMessage({
       .add(
         msgdata.toMap(),
       );
+}
+
+sendPushNotificationToUser({
+  required String title,
+  required String pushToken,
+  required String message,
+}) async {
+  final body = {
+    "to": pushToken,
+    "notification": {
+      "title": title,
+      "body": message,
+    }
+  };
+
+  var url = Uri.parse("https://fcm.googleapis.com/fcm/send");
+
+  var serverKey = "";
+
+  try {
+    var response = await http.post(url,
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: "key=$serverKey",
+        },
+        body: jsonEncode(body));
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+  } catch (e) {
+    print(e);
+  }
 }

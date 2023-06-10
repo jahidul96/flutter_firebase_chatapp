@@ -117,6 +117,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
 
     selectedFriendsId.add(FirebaseAuth.instance.currentUser!.uid);
 
+    selectedFriends.add(user);
+
     try {
       // send image to fb
       String fileName = p.basename(_image!.path);

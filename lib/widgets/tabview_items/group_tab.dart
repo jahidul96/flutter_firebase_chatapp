@@ -65,9 +65,6 @@ class _GroupTabCompState extends State<GroupTabComp> {
                         builder: (context) => GroupChatScreen(
                           groupData: group,
                           groupId: groupId,
-                          adminDetails: group.adminDetails,
-                          membersId: group.members,
-                          grpMembersDetails: group.memberDetails,
                         ),
                       ),
                     );

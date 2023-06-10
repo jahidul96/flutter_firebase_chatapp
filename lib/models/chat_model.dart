@@ -8,6 +8,7 @@ class ChatModel {
   String from;
   String profilePic;
   DateTime createdAt;
+  String pushToken;
   String imgUrl;
   bool seen;
   ChatModel({
@@ -16,6 +17,7 @@ class ChatModel {
     required this.from,
     required this.profilePic,
     required this.createdAt,
+    required this.pushToken,
     required this.imgUrl,
     required this.seen,
   });
@@ -27,6 +29,7 @@ class ChatModel {
       'from': from,
       'profilePic': profilePic,
       'createdAt': createdAt.millisecondsSinceEpoch,
+      'pushToken': pushToken,
       'imgUrl': imgUrl,
       'seen': seen,
     };
@@ -39,6 +42,7 @@ class ChatModel {
       from: map['from'] ?? '',
       profilePic: map['profilePic'] ?? '',
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      pushToken: map['pushToken'] ?? '',
       imgUrl: map['imgUrl'] ?? '',
       seen: map['seen'] ?? false,
     );

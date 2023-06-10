@@ -25,17 +25,11 @@ class GroupChatScreen extends StatefulWidget {
   static const routeName = "GroupChatScreen";
 
   GroupModel groupData;
-  List<UserModel> grpMembersDetails;
-  List membersId;
-  UserModel adminDetails;
   String groupId;
   GroupChatScreen({
     super.key,
     required this.groupData,
     required this.groupId,
-    required this.grpMembersDetails,
-    required this.membersId,
-    required this.adminDetails,
   });
 
   @override
@@ -85,6 +79,17 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             groupId: widget.groupId,
             senderId: FirebaseAuth.instance.currentUser!.uid,
             text: textController.text);
+
+        for (var element in widget.groupData.memberDetails) {
+          if (element.id == userProvider.user.id) {
+            return;
+          }
+// sending push notifiaction
+          sendPushNotificationToUser(
+              message: "an image send",
+              pushToken: element.pushToken,
+              title: userProvider.user.username);
+        }
       } catch (e) {
         print(e);
       }
@@ -95,6 +100,17 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           groupId: widget.groupId,
           senderId: FirebaseAuth.instance.currentUser!.uid,
           text: textController.text);
+
+      for (var element in widget.groupData.memberDetails) {
+        if (element.id == userProvider.user.id) {
+          return;
+        }
+// sending push notifiaction
+        sendPushNotificationToUser(
+            message: textController.text,
+            pushToken: element.pushToken,
+            title: userProvider.user.username);
+      }
     }
 
     setState(() {
@@ -154,9 +170,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => GroupDetails(
-                        adminDetails: widget.adminDetails,
-                        grpMembersDetails: widget.grpMembersDetails,
-                        membersId: widget.membersId,
+                        adminDetails: widget.groupData.adminDetails,
+                        grpMembersDetails: widget.groupData.memberDetails,
+                        membersId: widget.groupData.members,
                         groupId: widget.groupId,
                       ),
                     ));

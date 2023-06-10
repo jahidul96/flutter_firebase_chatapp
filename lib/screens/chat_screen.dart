@@ -77,7 +77,9 @@ class _ChatScreenState extends State<ChatScreen> {
         friendUsername: widget.userData.username,
         friendProfilePic: widget.userData.profilePic,
         image: _image,
-        context: context);
+        context: context,
+        friendPushToken: widget.userData.pushToken,
+        userPushToken: userProvider.user.pushToken);
 
     setState(() {
       _image = null;
